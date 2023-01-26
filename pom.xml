@@ -33,7 +33,12 @@
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
+            <artifactId>ffmpeg-platform</artifactId>
+            <version>5.1.2-${javacpp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
             <version>${javacpp.version}</version>
         </dependency>
         <dependency>

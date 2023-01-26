@@ -1,2 +1,2 @@
 api:
-  bilibiliRtmp: ${BILIBILI_RTMP}
+  bilibiliRtmp: ${BILI_RTMP}
