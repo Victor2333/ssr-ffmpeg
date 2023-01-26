@@ -5,7 +5,6 @@ import com.tang.victor.ssrffmpeg.conf.ApiConfiguration
 import com.tang.victor.ssrffmpeg.controller.SRSCallbackBody
 import jakarta.annotation.PreDestroy
 import mu.KotlinLogging
-import org.bytedeco.javacpp.Loader
 import org.springframework.stereotype.Service
 
 private val log = KotlinLogging.logger {}
@@ -35,8 +34,7 @@ class SRSService(
 }
 
 fun process(from: String, to: String): Process {
-    val ffmpeg = Loader.load(org.bytedeco.ffmpeg.ffmpeg::class.java)
     val processBuilder =
-        ProcessBuilder(ffmpeg, "-re", "-i", from, "-codec", "copy", "-f", "flv", "-y", to)
+        ProcessBuilder("ffmpeg", "-re", "-i", from, "-codec", "copy", "-f", "flv", "-y", to)
     return processBuilder.inheritIO().start()
 }
