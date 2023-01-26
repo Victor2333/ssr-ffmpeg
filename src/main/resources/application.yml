@@ -1,2 +1,2 @@
 api:
-  bilibiliRtmp: ${BILI_RTMP}
+  bilibiliRtmp: rtmp://live-push.bilivideo.com/live-bvc/

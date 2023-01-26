@@ -6,6 +6,7 @@ import com.tang.victor.ssrffmpeg.controller.SRSCallbackBody
 import jakarta.annotation.PreDestroy
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import org.springframework.util.Base64Utils
 
 private val log = KotlinLogging.logger {}
 
@@ -15,9 +16,11 @@ class SRSService(
     private val apiConfiguration: ApiConfiguration
 ) {
     fun publish(srsCallbackBody: SRSCallbackBody) {
+        log.info("start stream $srsCallbackBody")
+        if (srsCallbackBody.app != "bili") return
         val p = process(
             "${srsCallbackBody.tcUrl}/${srsCallbackBody.stream}",
-            apiConfiguration.bilibiliRtmp
+            "${apiConfiguration.bilibiliRtmp}${String(Base64Utils.decodeFromString(srsCallbackBody.stream))}"
         )
         srsCache.put(srsCallbackBody.clientId, p)
     }
