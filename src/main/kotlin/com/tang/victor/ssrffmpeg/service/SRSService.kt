@@ -4,12 +4,14 @@ import com.google.common.cache.Cache
 import com.tang.victor.ssrffmpeg.conf.ApiConfiguration
 import com.tang.victor.ssrffmpeg.controller.SRSCallbackBody
 import jakarta.annotation.PreDestroy
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.util.Base64Utils
 
 private val log = KotlinLogging.logger {}
 
+@OptIn(DelicateCoroutinesApi::class)
 @Service
 class SRSService(
     private val srsCache: Cache<String, Process>,
@@ -22,6 +24,14 @@ class SRSService(
             "${srsCallbackBody.tcUrl}/${srsCallbackBody.stream}",
             "${apiConfiguration.bilibiliRtmp}${String(Base64Utils.decodeFromString(srsCallbackBody.stream))}"
         )
+        GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                p.waitFor()
+                if (srsCache.getIfPresent(srsCallbackBody.clientId) != null) {
+                    srsCache.invalidate(srsCallbackBody.clientId)
+                }
+            }
+        }
         srsCache.put(srsCallbackBody.clientId, p)
     }
 
